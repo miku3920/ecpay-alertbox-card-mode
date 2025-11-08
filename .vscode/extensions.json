@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "pflannery.vscode-versionlens",
+    "christian-kohler.path-intellisense",
+    "streetsidesoftware.code-spell-checker",
+    "medo64.render-crlf",
+    "miku3920.vscode-render-special-chars",
+    "usernamehw.errorlens",
+    "EditorConfig.EditorConfig",
+    "mikestead.dotenv",
+    "github.vscode-github-actions",
+    "SanjulaGanepola.github-local-actions",
+    "mhutchie.git-graph",
+    "vitest.explorer",
+    "dbaeumer.vscode-eslint"
+  ]
+}

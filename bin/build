@@ -1,0 +1,13 @@
+#!/bin/bash
+
+NAME="$(jq -r '.name' package.json)"
+VERSION="v$(jq -r '.version' package.json)"
+
+mkdir -p dist
+zip -rFS dist/$NAME-$VERSION.zip \
+  background.js \
+  manifest.json \
+  icons/ \
+  popup/ \
+  scripts/ \
+  -x "*.DS_Store" "*.git*"
