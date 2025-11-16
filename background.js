@@ -5,7 +5,7 @@ const initCardSystem = () => {
   script.onload = () => {
     script.remove()
     /* eslint-disable-next-line no-console */
-    console.log('✅ 卡片系統已初始化')
+    console.log(`[${new Date().toLocaleTimeString('sv')}] ✅ 卡片系統已初始化`)
   }
 
   document.body.appendChild(script)
@@ -18,7 +18,7 @@ const activateCardMode = () => {
   script.onload = () => {
     script.remove()
     /* eslint-disable-next-line no-console */
-    console.log('✅ 已啟動卡片模式')
+    console.log(`[${new Date().toLocaleTimeString('sv')}] ✅ 已啟動卡片模式`)
   }
 
   document.body.appendChild(script)
@@ -31,7 +31,7 @@ const restoreOriginalMode = () => {
   script.onload = () => {
     script.remove()
     /* eslint-disable-next-line no-console */
-    console.log('🎬 已還原動畫模式')
+    console.log(`[${new Date().toLocaleTimeString('sv')}] 🎬 已還原動畫模式`)
   }
 
   document.body.appendChild(script)

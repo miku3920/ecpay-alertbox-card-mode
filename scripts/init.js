@@ -6,6 +6,13 @@
   window.ecpayCardSystemInitialized = true
   window.ecpayCardModeActivated = false
 
+  const alertMsg = (window.settings && window.settings.MsgTemplate) || '{name} 贊助 {amount} 元'
+
+  const donateHistory = []
+  const STORAGE_KEY = 'donateHistory'
+
+  const wait = (ms = 100) => new Promise((resolve) => { setTimeout(resolve, ms) })
+
   const createElement = (tag, props = {}, ...children) => {
     const el = document.createElement(tag)
     Object.entries(props).forEach(([key, value]) => {
@@ -19,34 +26,24 @@
     return el
   }
 
-  document.body.appendChild(createElement('div', {
-    id: 'cardContainer',
-    style: {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      padding: '20px',
-      boxSizing: 'border-box',
-      fontFamily: 'Open Sans',
-      zIndex: '99999',
-      display: 'none',
-    },
-  }))
-
-  if (window.showAlert) {
-    window.originalShowAlert = window.showAlert
+  const initCardContainer = () => {
+    document.body.appendChild(createElement('div', {
+      id: 'cardContainer',
+      style: {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        padding: '20px',
+        boxSizing: 'border-box',
+        fontFamily: 'Open Sans',
+        zIndex: '99999',
+        display: 'none',
+      },
+    }))
   }
 
-  const alertMsg = (window.settings && window.settings.MsgTemplate) || '{name} 贊助 {amount} 元'
-
-  window.showAlert = (data) => {
-    if (!window.ecpayCardModeActivated) {
-      if (window.originalShowAlert) {
-        window.originalShowAlert(data)
-      }
-    }
-
+  const appendCard = (data) => {
     document.getElementById('cardContainer').prepend(
       createElement(
         'div',
@@ -84,7 +81,7 @@
               fontSize: '14px',
               color: '#999',
             },
-            textContent: (new Date()).toLocaleTimeString('sv'),
+            textContent: data.timestamp || (new Date()).toLocaleTimeString('sv'),
           }),
         ),
         createElement('div', {
@@ -96,5 +93,87 @@
         }),
       ),
     )
+  }
+
+  const getStorage = (key) => {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(key))
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.error(`[${new Date().toLocaleTimeString('sv')}] ❌ 讀取資料失敗`, error)
+      return null
+    }
+  }
+
+  const setStorage = (key, data) => {
+    try {
+      window.sessionStorage.setItem(key, JSON.stringify(data))
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.error(`[${new Date().toLocaleTimeString('sv')}] ❌ 儲存資料失敗`, error)
+    }
+  }
+
+  const delStorage = (key) => {
+    try {
+      window.sessionStorage.removeItem(key)
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.error(`[${new Date().toLocaleTimeString('sv')}] ❌ 刪除資料失敗`, error)
+    }
+  }
+
+  const appendDonateHistory = (data) => {
+    donateHistory.push({
+      name: data.name,
+      amount: data.amount,
+      msg: data.msg,
+      timestamp: (new Date()).toLocaleTimeString('sv'),
+    })
+
+    if (donateHistory.length > 100) {
+      donateHistory.shift()
+    }
+  }
+
+  initCardContainer()
+
+  const loadedHistory = getStorage(STORAGE_KEY)
+  if (Array.isArray(loadedHistory)) {
+    loadedHistory.forEach(appendCard)
+    donateHistory.push(...loadedHistory)
+  }
+  delStorage(STORAGE_KEY)
+
+  if (window.showAlert) {
+    window.originalShowAlert = window.showAlert
+
+    window.showAlert = (data) => {
+      if (!window.ecpayCardModeActivated) {
+        window.originalShowAlert(data)
+      }
+      appendCard(data)
+      appendDonateHistory(data)
+    }
+  }
+
+  if (window.connection) {
+    window.connection.onreconnecting(() => {
+      /* eslint-disable-next-line no-console */
+      console.log(`[${new Date().toLocaleTimeString('sv')}] ⚠️ 連線中斷，正在嘗試重新連線...`)
+    })
+
+    window.connection.onreconnected(() => {
+      /* eslint-disable-next-line no-console */
+      console.log(`[${new Date().toLocaleTimeString('sv')}] ✅ 重新連線成功`)
+    })
+
+    window.connection.onclose(async () => {
+      /* eslint-disable-next-line no-console */
+      console.log(`[${new Date().toLocaleTimeString('sv')}] ❌ 連線已完全中斷，正在重新整理頁面...`)
+      setStorage(STORAGE_KEY, donateHistory)
+      await wait()
+      window.location.reload()
+    })
   }
 })()

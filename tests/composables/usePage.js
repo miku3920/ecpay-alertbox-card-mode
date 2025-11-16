@@ -64,7 +64,7 @@ const usePage = () => {
     await wait()
   }
 
-  const clickExtensionIcon = async () => {
+  const clickIcon = async () => {
     if (!context) {
       throw new Error('Context 尚未初始化，請先呼叫 newPage()')
     }
@@ -81,18 +81,14 @@ const usePage = () => {
     await wait()
   }
 
-  const showAlert = async () => {
+  const showAlert = async (data) => {
     if (!page) {
       throw new Error('Page 尚未初始化，請先呼叫 newPage()')
     }
 
-    await page.evaluate(() => {
-      window.showAlert({
-        name: '測試使用者_E2E',
-        amount: '12345',
-        msg: '這是 E2E 測試訊息',
-      })
-    })
+    await page.evaluate((alertData) => {
+      window.showAlert(alertData)
+    }, data)
     await wait()
   }
 
@@ -100,7 +96,15 @@ const usePage = () => {
   const getContext = () => context
 
   return {
-    newPage, close, goto, reload, clickExtensionIcon, showAlert, getPage, getContext,
+    wait,
+    goto,
+    newPage,
+    close,
+    reload,
+    clickIcon,
+    showAlert,
+    getPage,
+    getContext,
   }
 }
 

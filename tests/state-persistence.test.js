@@ -4,7 +4,7 @@ import {
 import usePage from './composables/usePage'
 
 const {
-  newPage, close, reload, clickExtensionIcon, getPage,
+  newPage, close, reload, clickIcon, getPage,
 } = usePage()
 
 describe('狀態持久化', () => {
@@ -31,7 +31,7 @@ describe('狀態持久化', () => {
   test('重新整理後應該保持狀態 false', async () => {
     const page = getPage()
 
-    await clickExtensionIcon()
+    await clickIcon()
 
     const isActivatedBefore = await page.evaluate(() => window.ecpayCardModeActivated)
     expect(isActivatedBefore).toBe(false)

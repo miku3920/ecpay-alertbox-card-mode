@@ -1,6 +1,6 @@
 {
   "name": "ecpay-alertbox-card-mode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "在綠界「贊助成功動畫網址」啟動卡片列表模式",
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "postinstall": "simple-git-hooks"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.39.1",
     "eslint": "9.39.1",
@@ -21,7 +22,7 @@
     "lint-staged": "^16.2.6",
     "playwright": "^1.56.1",
     "simple-git-hooks": "^2.13.1",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.9"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

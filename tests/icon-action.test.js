@@ -4,7 +4,7 @@ import {
 import usePage from './composables/usePage'
 
 const {
-  newPage, close, clickExtensionIcon, getPage,
+  newPage, close, clickIcon, getPage,
 } = usePage()
 
 describe('Icon 點擊切換', () => {
@@ -22,17 +22,17 @@ describe('Icon 點擊切換', () => {
     const cardContainerFirst = page.locator('#cardContainer')
     expect(await cardContainerFirst.isVisible()).toBe(true)
 
-    await clickExtensionIcon()
+    await clickIcon()
 
     const cardContainerSecond = page.locator('#cardContainer')
     expect(await cardContainerSecond.isVisible()).toBe(false)
 
-    await clickExtensionIcon()
+    await clickIcon()
 
     const cardContainerThird = page.locator('#cardContainer')
     expect(await cardContainerThird.isVisible()).toBe(true)
 
-    await clickExtensionIcon()
+    await clickIcon()
 
     const cardContainerFourth = page.locator('#cardContainer')
     expect(await cardContainerFourth.isVisible()).toBe(false)

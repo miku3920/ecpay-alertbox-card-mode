@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "綠界贊助成功動畫 ⇄ 卡片模式",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "在綠界「贊助成功動畫網址」啟動卡片列表模式",
   "permissions": [
     "scripting",

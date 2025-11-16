@@ -1,12 +1,18 @@
+import path from 'path'
+import { defineConfig } from 'eslint/config'
 import eslint from '@eslint/js'
-import globals from 'globals'
+import { includeIgnoreFile } from '@eslint/compat'
 import { FlatCompat } from '@eslint/eslintrc'
+import globals from 'globals'
+
+const gitignore = path.join(process.cwd(), '.gitignore')
 
 const compat = new FlatCompat({
   baseDirectory: process.cwd(),
 })
 
-export default [
+export default defineConfig([
+  includeIgnoreFile(gitignore),
   eslint.configs.recommended,
   ...compat.extends('airbnb-base'),
   {
@@ -36,4 +42,4 @@ export default [
       'func-names': 'error',
     },
   },
-]
+])
